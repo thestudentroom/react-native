@@ -19,6 +19,7 @@
 @property (nonatomic, assign) BOOL autoCorrect;
 @property (nonatomic, assign) BOOL selectTextOnFocus;
 @property (nonatomic, assign) BOOL blurOnSubmit;
+@property (nonatomic, assign) BOOL showDone;
 @property (nonatomic, assign) UIEdgeInsets contentInset;
 @property (nonatomic, strong) UIColor *placeholderTextColor;
 @property (nonatomic, assign) NSInteger mostRecentEventCount;
