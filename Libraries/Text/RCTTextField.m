@@ -21,6 +21,7 @@
   BOOL _jsRequestingFirstResponder;
   NSInteger _nativeEventCount;
   BOOL _submitted;
+  UIToolbar *_keyboardToolbar;
   UITextRange *_previousSelectionRange;
 }
 
@@ -34,6 +35,17 @@
     [self addTarget:self action:@selector(textFieldEndEditing) forControlEvents:UIControlEventEditingDidEnd];
     [self addTarget:self action:@selector(textFieldSubmitEditing) forControlEvents:UIControlEventEditingDidEndOnExit];
     [self addObserver:self forKeyPath:@"selectedTextRange" options:0 context:nil];
+    
+    _keyboardToolbar = [[UIToolbar alloc] init];
+    [_keyboardToolbar sizeToFit];
+    UIBarButtonItem *flexBarButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                      target:nil action:nil];
+    UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                      target:self action:@selector(resignFirstResponder)];
+    _keyboardToolbar.items = @[flexBarButton, doneBarButton];
+    
     _blurOnSubmit = YES;
   }
   return self;
@@ -254,6 +266,9 @@ static void RCTUpdatePlaceholder(RCTTextField *self)
 
 - (void)reactWillMakeFirstResponder
 {
+  if (_showDone && self.inputAccessoryView == nil) {
+    self.inputAccessoryView = _keyboardToolbar;
+  }
   _jsRequestingFirstResponder = YES;
 }
 
